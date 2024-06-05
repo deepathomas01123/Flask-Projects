@@ -1,0 +1,101 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+h4 {
+    color: #333;
+}
+
+.row {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+a.btn-primary {
+    color: white;
+    background-color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+a.btn-primary:hover {
+    background-color: #0056b3;
+}
+/* Query Area Styling */
+.query-area {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.query-area h4 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.query-form {
+    display: grid;
+    grid-gap: 10px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-field input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.query-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.query-btn:hover {
+    background-color: #0056b3;
+}
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Adjust spacing as needed */
+}
+.card-text {
+    white-space: normal; /* Ensures text wraps */
+    overflow: visible;   /* Ensures content isn't clipped */
+    text-overflow: clip; /* Prevents ellipsis or clipping */
+}
+
+.card-footer {
+    width: 100%;
+}

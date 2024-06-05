@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #333; /* Dark background */
+        }
+
+        .container {
+            max-width: 1200px; /* Suitable max width for larger content */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #222; /* Darker shade for the form background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #fff; /* White text color */
+        }
+
+        .alert {
+            background-color: #dc3545; /* Bootstrap danger color for alerts */
+            color: white;
+        }
+
+        .card {
+            background-color: #333; /* Dark background for cards */
+            color: white;
+        }
+
+        .card img {
+            height: 160px; /* Fixed height for images */
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd; /* Bootstrap primary blue */
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: #dc3545; /* Bootstrap danger color */
+            border: none;
+        }
+
+        .btn:hover {
+            opacity: 1; /* Full opacity on hover */
+        }
+
+        input, .form-control {
+            background-color: #555; /* Lighter gray for input fields */
+            color: #ddd; /* Light gray text color for input fields */
+        }
+
+        input:focus, .form-control:focus {
+            background-color: #777; /* Slightly lighter gray on focus */
+            color: #fff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- User Area -->
+        <div class="row mb-3">
+            <div class="col">
+                <h4>User Area</h4>
+                <p><span style="font-weight: bold; color: #007bff;">Welcome, {{ user_name }}</span></p>
+            </div>
+        </div>
+
+        <!-- Subscription Area -->
+        <div class="row">
+            <div class="col">
+                <h4>Subscription Area</h4>
+                <div class="row row-cols-1 row-cols-md-6 g-4">
+                    {% if subscriptions %}
+                        {% for subscription in subscriptions %}
+                            <div class="col d-flex align-items-stretch"> <!-- Flexbox for equal height -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ subscription.title.title() }}</h5>
+                                        <p class="card-text">Artist: {{ subscription.artist.title() }}</p>
+                                        <p class="card-text">Year: {{ subscription.year }}</p>
+                                    </div>
+                                    <img src="{{ subscription.artist_image_url }}" class="card-img-bottom" alt="Artist image" style="width:100%; height:160px; object-fit: cover;"> <!-- Adjust height as needed -->
+                                    <div class="card-footer text-center"> <!-- Footer for consistent button placement -->
+                                        <form action="/remove_subscription" method="post">
+                                            <input type="hidden" name="email" value="{{ subscription.email }}">
+                                            <input type="hidden" name="title" value="{{ subscription.title }}">
+                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col">
+                             <p><span style="font-weight: bold; color: #007bff;">No Subscriptions</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Query Area -->
+        <div class="row mt-3">
+            <div class="col">
+                <h4>Query Area</h4>
+                <form action="/success" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Enter Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Year:</label>
+                        <input type="text" id="year" name="year" class="form-control" placeholder="Enter Year">
+                    </div>
+                    <div class="mb-3">
+                        <label for="artist" class="form-label">Artist:</label>
+                        <input type="text" id="artist" name="artist" class="form-control" placeholder="Enter Artist">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Query</button>
+                </form>
+            </div>
+        </div>
+
+               <!-- Search Results Area -->
+<div class="row row-cols-1 row-cols-md-6 g-4">
+    {% for item in items %}
+    <div class="col d-flex align-items-stretch">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ item.title.title() }}</h5>
+                <p class="card-text">Artist: {{ item.artist.title() }}</p>
+                <p class="card-text">Year: {{ item.year }}</p>
+            </div>
+            {% if item.img_url %}
+            <img src="{{ item.img_url }}" class="card-img-bottom" alt="Artist image" style="width:100%; height:160px; object-fit:cover;">
+            {% endif %}
+            <!-- Subscribe Button inside the card, but outside the card-body -->
+            <form action="{{ url_for('subscribe') }}" method="post">
+            <input type="hidden" name="title" value="{{ item.title }}">
+            <input type="hidden" name="artist" value="{{ item.artist }}">
+            <input type="hidden" name="year" value="{{ item.year }}">
+              <button type="submit" class="btn btn-primary mx-auto d-block" >Subscribe</button>
+</form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+        <!-- Logout Link -->
+        <div class="row mt-3">
+            <div class="col">
+                <a href="/logout" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

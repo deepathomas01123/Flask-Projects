@@ -1,0 +1,45 @@
+def success():
+    user_name = session.get('user_name', 'Guest')  # Guest is the default name if user not found
+    user_email = session.get('user_email')
+    items = []  # Default to no items
+    if request.method == 'POST':
+        title = request.form.get('title').lower().strip()
+        artist = request.form.get('artist').lower().strip()
+        year = request.form.get('year').strip()
+
+        # Build the FilterExpression
+        filter_expressions = []
+        if title:
+            filter_expressions.append(Attr('title').contains(title))
+        if artist:
+            filter_expressions.append(Attr('artist').contains(artist))
+        if year:
+            filter_expressions.append(Attr('year').eq(year))
+        # Combine all conditions with AND
+        final_filter_expression = None
+        if filter_expressions:
+            final_filter_expression = filter_expressions[0]
+            for expression in filter_expressions[1:]:
+                final_filter_expression = final_filter_expression & expression
+        # print(final_filter_expression)
+        # Perform the scan or query
+        if final_filter_expression:
+            response = music_table.scan(
+                FilterExpression=final_filter_expression
+            )
+            # print(response)
+            items = response['Items']
+        else:
+            items = []
+
+        if not items:
+            flash('No result is retrieved. Please query again', 'info')
+
+    # Query DynamoDB for the user's subscriptions
+    response = subscription_table.query(
+        KeyConditionExpression=Key('email').eq(user_email)
+    )
+    subscriptions = response.get('Items', [])
+    for item in subscriptions:
+        item['image_url'] = get_artist_image_url(item['artist'])
+    return render_template('success.html', user_name=user_name, subscriptions=subscriptions, items=items)

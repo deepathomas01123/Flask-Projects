@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+</head>
+<style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #333; /* Dark background */
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 450px;
+            padding: 20px;
+            background-color: #222; /* Darker shade for the form background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #fff; /* White text color */
+        }
+
+        input[type=email], input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #555; /* Lighter gray for input fields */
+            color: #ddd; /* Light gray text color for input fields */
+        }
+
+        input[type=email]:focus, input[type=password]:focus {
+            background-color: #777; /* Slightly lighter gray on focus */
+            outline: none;
+        }
+
+        button {
+            background-color: #0d6efd; /* Bootstrap primary blue for the button */
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        button:hover {
+            opacity:1;
+        }
+
+        a {
+            color: #0d6efd; /* Match button color for links */
+        }
+    </style>
+<body>
+    <div class="container">
+        <br>
+         <h3>Login</h3>
+        <br>
+         <!-- Display flash messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div id="flash-messages">
+            {% for message in messages %}
+              <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+     <form action="/login" method="post" >
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <br>
+        <p>Don't have an account? <a href="/register">Register here</a>.</p>
+    </div>
+
+</body>
+</html>
