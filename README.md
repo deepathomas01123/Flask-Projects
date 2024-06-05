@@ -1,3 +1,6 @@
+Overview
+Develop an AWS EC2, S3, API Gateway, Lambda, and DynamoDB based web application.
+
 This Project contains a comprehensive web application project built using AWS, Flask, and Python. The application is designed to demonstrate the integration of various AWS services, including EC2, S3, API Gateway, Lambda, and DynamoDB.
 
 Key Features:
